@@ -23,6 +23,11 @@
         devShells.default = pkgs.mkShell {
           buildInputs = [rust] ++ (with pkgs;[
             pkg-config
+            nixfmt
+            nil
+            shellcheck
+            shfmt
+            nodePackages_latest.bash-language-server
           ]);
         };
       }

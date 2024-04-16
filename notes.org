@@ -1,0 +1,45 @@
+* Tokenizer Crate
+** Sources
+- [[https://arxiv.org/pdf/1508.07909v5.pdf][BPE original paper]]
+- [[https://github.com/rsennrich/subword-nmt][BPE author's repo]]
+- [[https://github.com/huggingface/tokenizers/tree/main][Hugging Face's Fast Tokenizers]] 
+** Architecture
+*** Tokens
+Tokens should be either an ~int~ or a special token such as ~eos~, ~sos~,
+etc. Optimally, these special tokens have a representation/internal
+value and are mostly a wrapper around the string. This enum should not
+be public, and would rather be accessed through an interface.
+#+begin_src rust
+enum Tokens<'a> {
+    Regular(i32),
+    SpecialToken(&'a str),
+}
+#+end_src
+*** Tokenizer
+**** Goals for the interfaces
+- Short: A few simple functions
+- Generic: Functions should be generic with respect to input
+- Specific: Specific over the output
+**** Tokenizer interface sketch
+#+begin_src rust
+  pub trait Tokenizer{
+    pub fn train(&self, text: Into<String>);
+    pub fn tokenize(&self, text: AsRef<str>) -> Vect<Tokens>;
+  }
+#+end_src
+**** Train
+#+begin_src rust
+pub fn train(&self, text: Into<String>);
+#+end_src
+**** Tokenizing
+*** Tokenizer builder
+*** Tokenizer config
+** Tokenizers models
+These models have to be implemented:
+*** TODO Word tokenizer
+This method breaks text into individual words based on a delimiter.
+*** TODO Character tokenizer
+This method breaks text down into individual characters.
+*** TODO Byte-pair encoding tokenizer
+Source: [[https://medium.com/@hsinhungw/understanding-byte-pair-encoding-fd196ebfe93f][Blog post]] 
+BPE merges frequent characters or character sequences.
